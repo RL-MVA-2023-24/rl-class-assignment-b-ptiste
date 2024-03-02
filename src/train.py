@@ -1,14 +1,11 @@
 # Standard library imports
 from copy import deepcopy
-import os
 import random
 
 # Third-party library imports
-import matplotlib.pyplot as plt
 import numpy as np
 import torch
 import torch.nn as nn
-from tqdm import tqdm
 
 # Local application imports
 from env_hiv import HIVPatient
@@ -82,11 +79,10 @@ class ProjectAgent:
         torch.save(self.model.state_dict(), path)
     
     def load(self):
-        self.model.load_state_dict(torch.load(r"C:\Users\baptc\Documents\Etudes\MVA\S2\RL\rl-class-assignment-b-ptiste\outputs\best_policy_best_23 (2).pt"))
+        self.model.load_state_dict(torch.load("best_policy.pt"))
         print("Model loaded")
         self.model.eval()
     
-
 class dqn_agent:
     def __init__(self, config, model):
         device = "cuda" if next(model.parameters()).is_cuda else "cpu"
@@ -120,7 +116,6 @@ class dqn_agent:
     def load(self):
         pass
     
-    
     def V_initial_state(self, env, nb_trials):   # NEW NEW NEW
         with torch.no_grad():
             for _ in range(nb_trials):
@@ -151,7 +146,7 @@ class dqn_agent:
         epsilon = self.epsilon_max
         step = 0
         best_return = 0
-        best_validation = -1
+
         while episode < max_episode:
             # update epsilon
             if step > self.epsilon_delay:
@@ -208,7 +203,6 @@ class dqn_agent:
     
 
 if __name__ == "__main__":
-    # Initialization of the agent. Replace DummyAgent with your custom agent implementation.
     
     config = {'nb_actions': 4,
             'observation_space':6, 
@@ -230,5 +224,3 @@ if __name__ == "__main__":
     agent = dqn_agent(config, QNetwork(6, 4, 256))
  
     returns = agent.train(env, 499)
-    plt.plot(returns)
-    plt.show()
