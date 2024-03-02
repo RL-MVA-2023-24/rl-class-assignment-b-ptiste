@@ -79,7 +79,7 @@ class ProjectAgent:
         torch.save(self.model.state_dict(), path)
     
     def load(self):
-        self.model.load_state_dict(torch.load("best_policy.pt"))
+        self.model.load_state_dict(torch.load("best_policy_2.pt"))
         print("Model loaded")
         self.model.eval()
     
