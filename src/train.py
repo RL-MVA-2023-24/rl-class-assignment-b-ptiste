@@ -284,7 +284,7 @@ if __name__ == "__main__":
         "epsilon_delay_decay": 500,
         "batch_size": 1024,
         "gradient_steps": 2,
-        "update_target_strategy": "ema",  # or 'ema'
+        "update_target_strategy": "ema",  
         "update_target_freq": 600,
         "update_target_tau": 0.001,
         "criterion": torch.nn.SmoothL1Loss(),
