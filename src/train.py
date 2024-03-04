@@ -44,6 +44,7 @@ class ReplayBuffer:
 class QNetwork(nn.Module):
     def __init__(self, observation_space, action_space, n_hid):
         super(QNetwork, self).__init__()
+        # I remove the batch normalization layers
         self.fc1 = nn.Linear(observation_space, n_hid)
         self.bn1 = nn.BatchNorm1d(n_hid)
         self.fc2 = nn.Linear(n_hid, n_hid)
@@ -180,6 +181,7 @@ class dqn_agent:
             if done or trunc:
                 episode += 1
                 
+                # save the model according to the evaluation score on the default environment
                 validation_score = evaluate_HIV(agent=self, nb_episode=1) if episode >= 75 else -1
                 
                 episode_return.append(episode_cum_reward)
@@ -193,7 +195,7 @@ class dqn_agent:
                 if validation_score > best_return:
                     print('New best policy found')
                     best_return = validation_score
-                    self.save(r"C:\Users\baptc\Documents\Etudes\MVA\S2\RL\rl-class-assignment-b-ptiste\outputs\best_policy.pt")
+                    self.save(r"best_policy.pt")
     
                 state, _ = env.reset()
                 episode_cum_reward = 0
@@ -207,16 +209,16 @@ if __name__ == "__main__":
     config = {'nb_actions': 4,
             'observation_space':6, 
           'learning_rate': 0.001,
-          'gamma': 0.90,
+          'gamma': 0.97,
           'buffer_size': 100000,
           'epsilon_min': 0.01,
           'epsilon_max': 1.,
-          'epsilon_decay_period': 20000,
+          'epsilon_decay_period': 10000,
           'epsilon_delay_decay': 500,
-          'batch_size': 512,
-          'gradient_steps': 3,
+          'batch_size': 1024,
+          'gradient_steps': 2,
           'update_target_strategy': 'ema', # or 'ema'
-          'update_target_freq': 400,
+          'update_target_freq': 600,
           'update_target_tau': 0.001,
           'criterion': torch.nn.SmoothL1Loss(),
           }
